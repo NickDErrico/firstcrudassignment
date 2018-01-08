@@ -23,11 +23,24 @@ app.get('/users/:name', function(req, res) {
   })
 });
 
-app.put('/modify/:name/:', function(req, res) {
+app.put('/modify/:name/:newname', function(req, res) {
   fs.readFile('./storage.json', 'utf-8', function(err, data) {
-
+    let parsedData = JSON.parse(data);
+    let matchedUser = parsedData.filter((item) => {
+      return item.name == req.params.name;
+    });
+    if (matchedUser.length >= 1) {
+      matchedUser[0].name = req.params.newname;
+      res.json(matchedUser)[0]
+    } else {
+      res.send('user does not exist')
+    }
   })
-})
+});
+
+app.delete('/delete/:name', function(req, res) {
+
+});
 
 app.post('/create/:name/:email/:state', function(req, res) {
   let userInfo = {
